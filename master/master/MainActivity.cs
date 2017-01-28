@@ -2,9 +2,9 @@
 using Android.Widget;
 using Android.OS;
 
-namespace victoria_master
+namespace master
 {
-    [Activity(Label = "victoria_master", MainLauncher = true, Icon = "@drawable/icon")]
+    [Activity(Label = "master", MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : Activity
     {
         protected override void OnCreate(Bundle bundle)
@@ -12,7 +12,7 @@ namespace victoria_master
             base.OnCreate(bundle);
 
             // Set our view from the "main" layout resource
-            // SetContentView (Resource.Layout.Main);
+            SetContentView (Resource.Layout.Main);
         }
     }
 }

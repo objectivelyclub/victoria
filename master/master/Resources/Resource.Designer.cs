@@ -9,9 +9,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Android.Runtime.ResourceDesignerAttribute("victoria_master.Resource", IsApplication=true)]
+[assembly: global::Android.Runtime.ResourceDesignerAttribute("master.Resource", IsApplication=true)]
 
-namespace victoria_master
+namespace master
 {
 	
 	
