@@ -66,6 +66,11 @@ namespace MIDI_Tone_Test
             byte[] bytes = System.IO.File.ReadAllBytes("/storage/AE2D-8B85/rey.mid");
 
 
+            File outputDir = context.getCacheDir();
+
+            System.IO.File.WriteAllBytes()
+
+
 
             int reyid = sp.Load("/storage/AE2D-8B85/rey.mid",1);
             int wwid = sp1.Load("/storage/AE2D-8B85/ww.mp3", 1);
