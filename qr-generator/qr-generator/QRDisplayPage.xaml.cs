@@ -15,14 +15,16 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using ZXing.Mobile;
+using Windows.Storage;
 
 namespace qr_generator
 {
     public sealed partial class QRDisplayPage : Page
     {
 
-        public string dataSizeText { get; set; }
-        public string dataContentsText { get; set; }
+        public string dataSizeText { get; private set; }
+        public string dataContentsText { get; private set; }
+        public object fileNameText { get; private set; }
 
         private System.Threading.Timer _timer;
 
@@ -50,6 +52,12 @@ namespace qr_generator
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            if(e.Parameter is StorageFile)
+            {
+                StorageFile file = e.Parameter as StorageFile;
+                fileNameText = file.Name;
+                Bindings.Update();
+            }
             base.OnNavigatedTo(e);
             GenerateBitmap();
             _timer = new System.Threading.Timer(new System.Threading.TimerCallback((obj) => Refresh()), null, 0, 2000);
@@ -83,6 +91,7 @@ namespace qr_generator
                     imageBarcode.Source = image;
                 }
                 inputDataIndex++;
+                Bindings.Update();
             });
 
         }

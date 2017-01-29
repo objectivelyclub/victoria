@@ -5,6 +5,8 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
+using Windows.Storage.Pickers;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -23,6 +25,10 @@ namespace qr_generator
     /// </summary>
     public sealed partial class MainPage : Page
     {
+
+        public StorageFile midiFile;
+        public String midiFileName;
+        public byte[] midiFileContents;
         public MainPage()
         {
             this.InitializeComponent();
@@ -30,7 +36,21 @@ namespace qr_generator
 
         private void qrGenerateButton_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(QRDisplayPage));           
+            Frame.Navigate(typeof(QRDisplayPage), midiFile);           
+        }
+
+        private async void openFileButton_Click(object sender, RoutedEventArgs e)
+        {
+            FileOpenPicker filePicker = new FileOpenPicker();
+            filePicker.ViewMode = PickerViewMode.Thumbnail;
+            filePicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+            filePicker.FileTypeFilter.Add(".mid");
+            filePicker.FileTypeFilter.Add(".midi");
+            midiFile = await filePicker.PickSingleFileAsync();
+            if (midiFile != null)
+            {
+                fileNameTextBlock.Text = midiFile.Name;
+            }
         }
     }
 }

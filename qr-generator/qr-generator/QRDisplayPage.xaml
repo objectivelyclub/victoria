@@ -18,13 +18,17 @@
       <Image Grid.Row ="0" Name="imageBarcode" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ></Image>
       <TextBlock x:Name="dataSizeTextBlock" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
         <Run Text="Data size:"></Run>
-        <Run Text="{x:Bind dataSizeText}"></Run>
+        <Run Text="{x:Bind dataSizeText, Mode=OneWay}"></Run>
         <Run Text="bytes"></Run>
         <LineBreak />
         <Run Text="Data contents:"></Run>
-        <Run Text="{x:Bind dataContentsText}"></Run>
+        <Run Text="{x:Bind dataContentsText, Mode=OneWay}"></Run>
       </TextBlock>
-     </Grid>
+      <TextBlock x:Name="fileNameTextBlock" HorizontalAlignment="Center" Margin="0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top">
+        <Run Text="Parsing file:"></Run>
+        <Run Text="{x:Bind fileNameText, Mode=OneWay}"></Run>
+      </TextBlock>
+        </Grid>
     
   </Grid>
 </Page>
