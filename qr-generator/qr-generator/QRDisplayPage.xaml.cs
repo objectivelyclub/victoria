@@ -44,6 +44,8 @@ namespace qr_generator
         public string dataSizeText { get; private set; }
         public string dataContentsText { get; private set; }
         public object fileNameText { get; private set; }
+        public object currentFrameNumberText { get; private set; }
+        public object totalFramesText { get; private set; }
 
         private System.Threading.Timer _timer;
 
@@ -127,6 +129,8 @@ namespace qr_generator
                 {
                     inputDataIndex = 0;
                 }
+                currentFrameNumberText = inputDataIndex;
+                totalFramesText = imageQueue.Count;
                 var image = imageQueue[inputDataIndex];
                 var size = dataSizeInfoQueue[inputDataIndex];
                 var contents = splitMidiFileContents[inputDataIndex];

@@ -24,6 +24,12 @@
         <Run Text="Data contents:"></Run>
         <Run Text="{x:Bind dataContentsText, Mode=OneWay}"></Run>
       </TextBlock>
+      <TextBlock x:Name="dataFrameNumberTextBlock" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Run Text="Frame number:"></Run>
+        <Run Text="{x:Bind currentFrameNumberText, Mode=OneWay}"></Run>
+        <Run Text="/"></Run>
+        <Run Text="{x:Bind totalFramesText, Mode=OneWay}"></Run>
+      </TextBlock>
       <TextBlock x:Name="fileNameTextBlock" HorizontalAlignment="Center" Margin="0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top">
         <Run Text="Parsing file:"></Run>
         <Run Text="{x:Bind fileNameText, Mode=OneWay}"></Run>
