@@ -14,15 +14,13 @@
       <Grid.RowDefinitions>
         <RowDefinition Height="2*" />
         <RowDefinition Height="1*"/>
-        <RowDefinition Height="1*"/>
       </Grid.RowDefinitions>
       <Image Grid.Row ="0" Name="imageBarcode" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ></Image>
       <TextBlock x:Name="dataSizeTextBlock" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
         <Run Text="Data size:"></Run>
         <Run Text="{x:Bind dataSizeText}"></Run>
         <Run Text="bytes"></Run>
-      </TextBlock>
-      <TextBlock x:Name="dataContentsTextBlock" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <LineBreak />
         <Run Text="Data contents:"></Run>
         <Run Text="{x:Bind dataContentsText}"></Run>
       </TextBlock>
