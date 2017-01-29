@@ -43,6 +43,7 @@ namespace qr_generator
 
         public string dataSizeText { get; private set; }
         public string dataContentsText { get; private set; }
+        public Visibility QRCodeReady { get; private set; }
         public object fileNameText { get; private set; }
         public object currentFrameNumberText { get; private set; }
         public object totalFramesText { get; private set; }
@@ -81,12 +82,14 @@ namespace qr_generator
             {
                 midiFile = e.Parameter as StorageFile;
                 fileNameText = midiFile.Name;
+                QRCodeReady = Visibility.Visible;
                 Bindings.Update();
                 var rawFileContents = await ReadFile(midiFile);
                 midiFileContents = Convert.ToBase64String(rawFileContents);
 
                 splitMidiFileContents = midiFileContents.SplitInParts(200).ToList();
                 GenerateBitmap();
+                QRCodeReady = Visibility.Collapsed;
             }
 
             base.OnNavigatedTo(e);
@@ -107,6 +110,13 @@ namespace qr_generator
             }
 
             return fileBytes;
+        }
+
+        private void backButtonClicked(object sender, RoutedEventArgs e)
+        {
+            _timer.Change(Timeout.Infinite, Timeout.Infinite);
+            Frame.Navigate(typeof(MainPage), midiFile);
+            inputDataIndex = 0;
         }
 
 
@@ -136,7 +146,7 @@ namespace qr_generator
                 var contents = splitMidiFileContents[inputDataIndex];
                 if(image != null)
                 {
-                    imageBarcode.Source = image;
+                    imageBarcode.Source = image ;
                     dataSizeText = size.ToString();
                     dataContentsText = contents;
                 }

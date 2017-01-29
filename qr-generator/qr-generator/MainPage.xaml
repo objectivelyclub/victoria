@@ -7,13 +7,21 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="2*" />
-            <RowDefinition Height="1*"/>
-        </Grid.RowDefinitions>
-        <Button x:Name="openFileButtton" Content="Open MIDI File" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Click="openFileButton_Click"/>
-        <Button x:Name="qrGenerateButton" Content="Generate QR Code" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Click="qrGenerateButton_Click" Margin="0,37.333,216,144"/>
-        <TextBlock x:Name="fileNameTextBlock" HorizontalAlignment="Left" Margin="124,6.333,0,0" Grid.Row="1" TextWrapping="Wrap" Text="No file selected." VerticalAlignment="Top"/>
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="4*"/>
+            </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+
+        <Button x:Name="openFileButtton" Content="Open MIDI File" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" Click="openFileButton_Click"/>
+            <Button x:Name="qrGenerateButton" Content="Generate QR Code" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Click="qrGenerateButton_Click" />
+        <TextBlock x:Name="fileNameTextBlock" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" Text="No file selected." VerticalAlignment="Stretch"/>
     </Grid>
 </Page>

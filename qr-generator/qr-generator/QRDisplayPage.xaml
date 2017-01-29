@@ -7,34 +7,45 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-  <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Image Grid.Row ="0" Name="imageBarcode" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></Image>
+        <TextBlock x:Name="parsingText" Text="Parsing File" Visibility="{x:Bind QRCodeReady, Mode=OneWay}" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
+        <Grid x:Name="LowerPaneGrid" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+        <TextBlock x:Name="dataSizeTextBlock" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <Run Text="Data size:"></Run>
+            <Run Text="{x:Bind dataSizeText, Mode=OneWay}"></Run>
+            <Run Text="bytes"></Run> 
+            <Run Text="Data contents:"></Run>
+            <Run Text="{x:Bind dataContentsText, Mode=OneWay}"></Run>
+        </TextBlock>
+        <TextBlock x:Name="dataFrameNumberTextBlock" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <Run Text="Frame number:"></Run>
+            <Run Text="{x:Bind currentFrameNumberText, Mode=OneWay}"></Run>
+            <Run Text="/"></Run>
+            <Run Text="{x:Bind totalFramesText, Mode=OneWay}"></Run>
+        </TextBlock>
+        <TextBlock x:Name="fileNameTextBlock" HorizontalAlignment="Left" Margin="0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top">
+            <Run Text="Parsing file:"></Run>
+            <Run Text="{x:Bind fileNameText, Mode=OneWay}"></Run>
+        </TextBlock>
 
-    <Grid >
-      <Grid.RowDefinitions>
-        <RowDefinition Height="2*" />
-        <RowDefinition Height="1*"/>
-      </Grid.RowDefinitions>
-      <Image Grid.Row ="0" Name="imageBarcode" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ></Image>
-      <TextBlock x:Name="dataSizeTextBlock" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Run Text="Data size:"></Run>
-        <Run Text="{x:Bind dataSizeText, Mode=OneWay}"></Run>
-        <Run Text="bytes"></Run>
-        <LineBreak />
-        <Run Text="Data contents:"></Run>
-        <Run Text="{x:Bind dataContentsText, Mode=OneWay}"></Run>
-      </TextBlock>
-      <TextBlock x:Name="dataFrameNumberTextBlock" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Run Text="Frame number:"></Run>
-        <Run Text="{x:Bind currentFrameNumberText, Mode=OneWay}"></Run>
-        <Run Text="/"></Run>
-        <Run Text="{x:Bind totalFramesText, Mode=OneWay}"></Run>
-      </TextBlock>
-      <TextBlock x:Name="fileNameTextBlock" HorizontalAlignment="Center" Margin="0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top">
-        <Run Text="Parsing file:"></Run>
-        <Run Text="{x:Bind fileNameText, Mode=OneWay}"></Run>
-      </TextBlock>
+            <Button x:Name="backButton" Grid.Row="0" Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Click="backButtonClicked" Content="Back"/>
         </Grid>
-    
-  </Grid>
+
+        </Grid>
 </Page>
