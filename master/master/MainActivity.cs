@@ -1,6 +1,7 @@
 ﻿using Android.App;
 using Android.Widget;
 using Android.OS;
+//using AudioSynth;
 
 namespace master
 {
@@ -15,9 +16,17 @@ namespace master
             Button printButton = FindViewById<Button>(Resource.Id.printButton);
             Button cindysButton = FindViewById<Button>(Resource.Id.cindysButton);
 
+            AudioSynth.AudioSynth audiosynth = new AudioSynth.AudioSynth();
+
+            
+
+
+
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);
         }
+
+        
     }
 }
 
