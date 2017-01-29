@@ -8,6 +8,20 @@
     mc:Ignorable="d">
 
   <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-    <Image Name="imageBarcode" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ></Image>
+
+
+    <Grid >
+      <Grid.RowDefinitions>
+        <RowDefinition Height="2*" />
+        <RowDefinition Height="1*"/>
+      </Grid.RowDefinitions>
+      <Image Grid.Row ="0" Name="imageBarcode" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ></Image>
+      <TextBlock x:Name="dataSizeTextBlock" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Run Text="Data size:"></Run>
+        <Run Text="{x:Bind dataSizeText}"></Run>
+        <Run Text="bytes"></Run>
+      </TextBlock>
+     </Grid>
+    
   </Grid>
 </Page>

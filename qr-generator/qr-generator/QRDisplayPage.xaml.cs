@@ -18,6 +18,9 @@ namespace qr_generator
 {
     public sealed partial class QRDisplayPage : Page
     {
+
+        public string dataSizeText { get; set; }
+
         public QRDisplayPage()
         {
             this.InitializeComponent();
@@ -37,9 +40,12 @@ namespace qr_generator
                 }
             };
 
-            var image = barcodeWriter.Write("The Return of the King. Abridged. dfkdhjdfhsadfhjdfhhfkjhdsakjfhkjdshfjhfkjafjkdjjjjjjjjjjjjjjjjjjjjjjjjjjjThe Return of the King. Abridged. dfkdhjdfhsadfhjdfhhfkjhdsakjfhkjdshfjhfkjafjkdjjjjjjjjjjjjjjjjjjjjjjjjjjjThe Return of the King. Abridged. dfkdhjdfhsadfhjdfhhfkjhdsakjfhkjdshfjhfkjafjkdjjjjjjjjjjjjjjjjjjjjjjjjjjjThe Return of the King. Abridged. dfkdhjdfhsadfhjdfhhfkjhdsakjfhkjdshfjhfkjafjkdjjjjjjjjjjjjjjjjjjjjjjjjjjj");
+            string inputData = String.Concat(Enumerable.Repeat("DEADBEEF10", 40));
+            var image = barcodeWriter.Write(inputData);
 
             imageBarcode.Source = image;
+
+            dataSizeText = (inputData.Length * sizeof(Char)).ToString();
         }
     }
 }
