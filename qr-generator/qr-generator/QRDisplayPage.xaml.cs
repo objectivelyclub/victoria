@@ -82,6 +82,7 @@ namespace qr_generator
                 Bindings.Update();
                 var rawFileContents = await ReadFile(midiFile);
                 midiFileContents = Convert.ToBase64String(rawFileContents);
+
                 splitMidiFileContents = midiFileContents.SplitInParts(200).ToList();
                 GenerateBitmap();
             }
@@ -113,6 +114,8 @@ namespace qr_generator
             {
                 var image = barcodeWriter.Write(inputData);
                 imageQueue.Add(image);
+                var size = inputData.Length * sizeof(char);
+                dataSizeInfoQueue.Add(size);
             }
         }
 
@@ -125,9 +128,13 @@ namespace qr_generator
                     inputDataIndex = 0;
                 }
                 var image = imageQueue[inputDataIndex];
+                var size = dataSizeInfoQueue[inputDataIndex];
+                var contents = splitMidiFileContents[inputDataIndex];
                 if(image != null)
                 {
                     imageBarcode.Source = image;
+                    dataSizeText = size.ToString();
+                    dataContentsText = contents;
                 }
                 inputDataIndex++;
                 Bindings.Update();
