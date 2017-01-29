@@ -30,7 +30,7 @@ namespace QRreader
 
             bool temp = true;
 
-            continuousScan();
+            //continuousScan();
 
             button.Click += async (sender, e) => {
 
