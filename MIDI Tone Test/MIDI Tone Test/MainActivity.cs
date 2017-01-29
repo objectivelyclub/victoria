@@ -15,6 +15,9 @@ namespace MIDI_Tone_Test
 
             // Set our view from the "main" layout resource
             SetContentView (Resource.Layout.Main);
+
+
+            /*
             JetPlayer jetPlayer = JetPlayer.GetJetPlayer();
             //jetPlayer.LoadJetFile("/storage/AE2D-8B85/jone.jet");
             JetPlayer jetPlayer2 = JetPlayer.GetJetPlayer();
@@ -23,7 +26,7 @@ namespace MIDI_Tone_Test
 
            // bool exists = File.Exists("/storage/AE2D-8B85/jone.jet");
 
-            while (true)
+            while (false)
             {
                 jetPlayer2 = JetPlayer.GetJetPlayer();
                 jetPlayer2.LoadJetFile("/storage/AE2D-8B85/jone2.jet");
@@ -42,14 +45,42 @@ namespace MIDI_Tone_Test
                 jetPlayer2.Release();
             }
 
-            bool here = false;
+    */
+            bool exists = File.Exists("/storage/AE2D-8B85/rey.mid");
+            bool exists2 = File.Exists("/storage/AE2D-8B85/ww.mp3");
+
+            AudioAttributes attributes = new AudioAttributes.Builder()
+    .SetUsage(AudioUsageKind.Game)
+    .SetContentType(AudioContentType.Music)
+    .Build();
+
+          //  SoundPool sp = new SoundPool.Builder().SetAudioAttributes(attributes).Build();
 
 
-            //jetPlayer2.LoadJetFile("/storage/AE2D-8B85/jone.jet");
-            //jetPlayer2.QueueJetSegment(4, -1, 10, -1, 0, segmentId++);
-            //jetPlayer.Pause();
-            //jetPlayer2.Play();
+            SoundPool sp = new SoundPool(2, Android.Media.Stream.Music, 0);
 
+
+            SoundPool sp1 = new SoundPool(2, Android.Media.Stream.Music, 0);
+
+
+            byte[] bytes = System.IO.File.ReadAllBytes("/storage/AE2D-8B85/rey.mid");
+
+
+
+            int reyid = sp.Load("/storage/AE2D-8B85/rey.mid",1);
+            int wwid = sp1.Load("/storage/AE2D-8B85/ww.mp3", 1);
+            System.Threading.Thread.Sleep(1000);
+            //sp.Play(wwid, 1, 1, 1, 0, 1f);
+            sp.Play(reyid, 1, 1, 2, 0, 1f);
+
+            System.Threading.Thread.Sleep(2000);
+            sp.Pause(reyid);
+            sp1.Play(wwid, 1, 1, 2, 0, 1f);
+            bool here1 = true;
+
+            while (true ){
+                System.Threading.Thread.Sleep(1800);
+            }
 
         }
     }
