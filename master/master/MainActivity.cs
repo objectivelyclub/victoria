@@ -25,22 +25,10 @@ namespace master
             Button continousScanButton = FindViewById<Button>(Resource.Id.contscan);
 
             AudioSynth.AudioSynth audiosynth = new AudioSynth.AudioSynth();
-            Scanner.Scanner scanner = new Scanner.Scanner(continousScanButton, Application);
+            Scanner.Scanner scanner = new Scanner.Scanner(singleScanButton, continousScanButton, txt, Application, audiosynth);
 
            
-            singleScanButton.Click += async (sender, e) => {
-
-                // Initialize the scanner first so it can track the current context
-                MobileBarcodeScanner.Initialize(Application);
-
-                var scan = new ZXing.Mobile.MobileBarcodeScanner();
-
-                var result = await scan.Scan();
-
-                if (result != null)
-
-                    txt.SetText((result.Text).ToCharArray(), 0, 5);
-            };
+            
             
             
 

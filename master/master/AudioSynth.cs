@@ -1,6 +1,9 @@
 ﻿using System.Threading;
 using Android.Media;
 using System.Collections.Generic;
+using System;
+using Java.IO;
+using Android.Content;
 
 namespace AudioSynth
 {
@@ -32,6 +35,26 @@ namespace AudioSynth
 
             spArray.Insert(0, sp1);
             spArray.Insert(1, sp2);
+        }
+
+        public void PlaySingleQR(string str)
+        {
+            byte[] actualB = Convert.FromBase64String(str);
+            File song = File.CreateTempFile("hjhki", "mid", null);
+            System.IO.File.WriteAllBytes(song.AbsolutePath, actualB);
+            //song.
+            //System.IO.File.make
+            //System.IO.File.WriteAllBytes("/storage/AE2D-8B85/adel.mid", actualB);
+            //File rey = System.IO.File.
+
+
+
+            int tmp = sp1.Load("/storage/AE2D-8B85/adel.mid", 1);
+
+            Thread.Sleep(2000);
+            sp1.Play(tmp,1,1,1,0,1);
+
+
         }
 
         public void addMidis(string[] midis)
