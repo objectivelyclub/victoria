@@ -16,19 +16,44 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using ZXing.Mobile;
 using Windows.Storage;
+using System.Threading.Tasks;
+using Windows.Storage.Streams;
 
 namespace qr_generator
 {
+
+    static class StringExtensions
+    {
+
+        public static IEnumerable<String> SplitInParts(this String s, Int32 partLength)
+        {
+            if (s == null)
+                throw new ArgumentNullException("s");
+            if (partLength <= 0)
+                throw new ArgumentException("Part length has to be positive.", "partLength");
+
+            for (var i = 0; i < s.Length; i += partLength)
+                yield return s.Substring(i, Math.Min(partLength, s.Length - i));
+        }
+
+    }
+
     public sealed partial class QRDisplayPage : Page
     {
 
         public string dataSizeText { get; private set; }
         public string dataContentsText { get; private set; }
+        public Visibility QRCodeReady { get; private set; }
         public object fileNameText { get; private set; }
+        public object currentFrameNumberText { get; private set; }
+        public object totalFramesText { get; private set; }
 
         private System.Threading.Timer _timer;
 
-        private string[] inputDataArray = {"ABCDEFGH22", "ABDFERGS43", "0123456789", "DEADBEEF10"};
+        private StorageFile midiFile;
+        private string midiFileContents;
+        private List<string> splitMidiFileContents;
+
         private int inputDataIndex = 0;
 
         private List<Windows.UI.Xaml.Media.Imaging.WriteableBitmap> imageQueue = new List<Windows.UI.Xaml.Media.Imaging.WriteableBitmap>();
@@ -36,6 +61,7 @@ namespace qr_generator
         private List<string> fakeInputDataList = new List<string>();
 
         private BarcodeWriter barcodeWriter = new BarcodeWriter
+
         {
             Format = ZXing.BarcodeFormat.QR_CODE,
             Options = new ZXing.Common.EncodingOptions
@@ -50,29 +76,58 @@ namespace qr_generator
         {
             this.InitializeComponent();
         }
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             if(e.Parameter is StorageFile)
             {
-                StorageFile file = e.Parameter as StorageFile;
-                fileNameText = file.Name;
+                midiFile = e.Parameter as StorageFile;
+                fileNameText = midiFile.Name;
+                QRCodeReady = Visibility.Visible;
                 Bindings.Update();
+                var rawFileContents = await ReadFile(midiFile);
+                midiFileContents = Convert.ToBase64String(rawFileContents);
+
+                splitMidiFileContents = midiFileContents.SplitInParts(200).ToList();
+                GenerateBitmap();
+                QRCodeReady = Visibility.Collapsed;
             }
+
             base.OnNavigatedTo(e);
-            GenerateBitmap();
             _timer = new System.Threading.Timer(new System.Threading.TimerCallback((obj) => Refresh()), null, 0, 2000);
         }
 
+        public async Task<byte[]> ReadFile(StorageFile file)
+        {
+            byte[] fileBytes = null;
+            using (IRandomAccessStreamWithContentType stream = await file.OpenReadAsync())
+            {
+                fileBytes = new byte[stream.Size];
+                using (DataReader reader = new DataReader(stream))
+                {
+                    await reader.LoadAsync((uint)stream.Size);
+                    reader.ReadBytes(fileBytes);
+                }
+            }
+
+            return fileBytes;
+        }
+
+        private void backButtonClicked(object sender, RoutedEventArgs e)
+        {
+            _timer.Change(Timeout.Infinite, Timeout.Infinite);
+            Frame.Navigate(typeof(MainPage), midiFile);
+            inputDataIndex = 0;
+        }
+
+
         private void GenerateBitmap()
         {
-            foreach (var inputData in inputDataArray)
+            foreach (var inputData in splitMidiFileContents)
             {
-                string fakeInputData = string.Concat(Enumerable.Repeat(inputData, 50));
-                var fakeInputDataSize = fakeInputData.Length * sizeof(char);
-                var image = barcodeWriter.Write(fakeInputData);
-
-                dataSizeInfoQueue.Add(fakeInputDataSize);
+                var image = barcodeWriter.Write(inputData);
                 imageQueue.Add(image);
+                var size = inputData.Length * sizeof(char);
+                dataSizeInfoQueue.Add(size);
             }
         }
 
@@ -84,11 +139,16 @@ namespace qr_generator
                 {
                     inputDataIndex = 0;
                 }
-                dataSizeText = dataSizeInfoQueue[inputDataIndex].ToString();
+                currentFrameNumberText = inputDataIndex;
+                totalFramesText = imageQueue.Count;
                 var image = imageQueue[inputDataIndex];
+                var size = dataSizeInfoQueue[inputDataIndex];
+                var contents = splitMidiFileContents[inputDataIndex];
                 if(image != null)
                 {
-                    imageBarcode.Source = image;
+                    imageBarcode.Source = image ;
+                    dataSizeText = size.ToString();
+                    dataContentsText = contents;
                 }
                 inputDataIndex++;
                 Bindings.Update();
