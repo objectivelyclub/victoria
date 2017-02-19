@@ -85,9 +85,9 @@ namespace qr_generator
                 QRCodeReady = Visibility.Visible;
                 Bindings.Update();
                 var rawFileContents = await ReadFile(midiFile);
-                midiFileContents = Convert.ToBase64String(rawFileContents);
+                midiFileContents = System.Text.Encoding.ASCII.GetString(rawFileContents);
 
-                splitMidiFileContents = midiFileContents.SplitInParts(200).ToList();
+                splitMidiFileContents = midiFileContents.SplitInParts(208).ToList();
                 GenerateBitmap();
                 QRCodeReady = Visibility.Collapsed;
             }
