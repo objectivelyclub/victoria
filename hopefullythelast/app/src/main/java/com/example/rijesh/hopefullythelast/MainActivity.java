@@ -11,13 +11,14 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     private ZXingScannerView mScannerView;
     private MidiDevice midiDev;
     private long timeSinceLastProcess = System.currentTimeMillis();
+    private byte current = 27;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         midiDev = new MidiDevice();
-        startScanner();
-        //setContentView(R.layout.activity_main);
+        //startScanner();
+        setContentView(R.layout.activity_main);
 
     }
 
@@ -39,10 +40,17 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
     @Override
     public void handleResult(Result rawResult) {
-        long tmp = System.currentTimeMillis();
+        /*long tmp = System.currentTimeMillis();
         if ((tmp - timeSinceLastProcess) > 2000){
             timeSinceLastProcess = System.currentTimeMillis();
             midiDev.addToQueue(Base64.decodeBase64(rawResult.toString().getBytes())); // Decodes QRcode into byte array.
+        }
+        */
+        byte[] b = Base64.decodeBase64(rawResult.toString().getBytes());
+
+        if (b[0] != current) {
+            current = b[0];
+            midiDev.addToQueue(b);
         }
         mScannerView.resumeCameraPreview(this);
     }

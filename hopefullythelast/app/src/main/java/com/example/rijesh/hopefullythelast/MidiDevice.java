@@ -16,6 +16,7 @@ public class MidiDevice  implements MidiDriver.OnMidiStartListener{
         midi = new MidiDriver();
         midi.setOnMidiStartListener(this);
         midi.start();
+        //midi.write(new byte[]{(byte)0xc1, (byte) 111});
     }
 
     public void addToQueue(final byte[] b) {
@@ -47,12 +48,17 @@ public class MidiDevice  implements MidiDriver.OnMidiStartListener{
     }
 
     public void resume() {
+        midi.start();
     }
 
     public void playCNote(){
         sendMidi(0x90, 48, 63);
         sendMidi(0x90, 52, 63);
         sendMidi(0x90, 55, 63);
+
+        sendMidi((int)0x90 +1, 48, 63);
+        sendMidi((int)0x90 +1, 52, 63);
+        sendMidi((int)0x90 +1, 55, 63);
     }
 
     public void onMidiStart()
