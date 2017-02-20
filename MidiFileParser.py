@@ -8,9 +8,16 @@ from mido import MidiFile
 import sys
 import array
 import struct
+import argparse
+import base64
 
-fileconv = MidiFile('rey.mid')
-fileout = open('out.mid', 'wb')
+parser = argparse.ArgumentParser()
+parser.add_argument("midifile")
+parser.add_argument("outfile")
+args = parser.parse_args()
+
+fileconv = MidiFile(args.midifile)
+fileout = open(args.outfile, 'wb')
 
 ticks_per_beat = fileconv.ticks_per_beat
 tempo = 500000
@@ -28,9 +35,13 @@ for i, track in enumerate(fileconv.tracks):
     for message in track:
     	if (message.bytes()[0] == 144):
 			out_time = (int)(message.time * seconds_per_tick * 1000)
+			print("time: %d" % out_time)
 			all_bytes.append(out_time)
 			all_bytes.append(message.bytes())
-			fileout.write(struct.pack('IBBB',out_time,message.bytes()[0],message.bytes()[1],message.bytes()[2]))
+			print(out_time)
+			struct_pack = struct.pack('IBBB',out_time,message.bytes()[0],message.bytes()[1],message.bytes()[2])
+			encoded_struct = base64.b64encode(struct_pack)
+			fileout.write(encoded_struct + '\n')
 			all_bytes = []
 
 		
