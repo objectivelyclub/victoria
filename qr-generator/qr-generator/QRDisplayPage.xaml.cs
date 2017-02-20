@@ -86,6 +86,14 @@ namespace qr_generator
                 midiFileContents = System.Text.Encoding.ASCII.GetString(rawFileContents);
 
                 splitMidiFileContents = midiFileContents.SplitInParts(208).ToList();
+
+                byte[] header = new byte[7];
+                for (var i = 0; i < splitMidiFileContents.Count; i++)
+                {
+                    header[0] = Convert.ToByte(i);
+                    splitMidiFileContents[i] = System.Convert.ToBase64String(header) + "\n" + splitMidiFileContents[i];
+                }
+                
                 GenerateBitmap();
             }
 
