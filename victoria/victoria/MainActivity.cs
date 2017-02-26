@@ -1,18 +1,17 @@
 ﻿using Android.App;
 using Android.Widget;
 using Android.OS;
-using ZXing.Mobile;
-using System.IO;
-using System;
+using Android.Content;
 
-namespace master
+namespace victoria
 {
-    [Activity(Label = "master", MainLauncher = true, Icon = "@drawable/icon")]
+    [Activity(Label = "victoria", MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : Activity
     {
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
+            Vibrator vib = (Vibrator)this.ApplicationContext.GetSystemService(Context.VibratorService);
 
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);
@@ -24,19 +23,17 @@ namespace master
             Button singleScanButton = FindViewById<Button>(Resource.Id.singlescan);
             Button continousScanButton = FindViewById<Button>(Resource.Id.contscan);
 
-            AudioSynth.AudioSynth audiosynth = new AudioSynth.AudioSynth();
-            Scanner.Scanner scanner = new Scanner.Scanner(singleScanButton, continousScanButton, txt, Application, audiosynth);
+            MidiPlayer.MidiPlayer midiPlayer = new MidiPlayer.MidiPlayer();
+            playNoteButton.Click += (sender, e) =>
+            {
+                midiPlayer.playCNote();
+            };
 
-           
-            
-            
-            
-
-            
+            Scanner.Scanner scanner = new Scanner.Scanner(singleScanButton, continousScanButton, txt, Application, midiPlayer, vib);
 
         }
 
-        
+
     }
 }
 

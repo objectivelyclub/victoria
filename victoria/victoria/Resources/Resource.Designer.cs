@@ -9,9 +9,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Android.Runtime.ResourceDesignerAttribute("master.Resource", IsApplication=true)]
+[assembly: global::Android.Runtime.ResourceDesignerAttribute("victoria.Resource", IsApplication=true)]
 
-namespace master
+namespace victoria
 {
 	
 	
@@ -26,9 +26,9 @@ namespace master
 		
 		public static void UpdateIdValues()
 		{
-			global::ZXing.Mobile.Resource.Id.contentFrame = global::master.Resource.Id.contentFrame;
-			global::ZXing.Mobile.Resource.Layout.zxingscanneractivitylayout = global::master.Resource.Layout.zxingscanneractivitylayout;
-			global::ZXing.Mobile.Resource.Layout.zxingscannerfragmentlayout = global::master.Resource.Layout.zxingscannerfragmentlayout;
+			global::ZXing.Mobile.Resource.Id.contentFrame = global::victoria.Resource.Id.contentFrame;
+			global::ZXing.Mobile.Resource.Layout.zxingscanneractivitylayout = global::victoria.Resource.Layout.zxingscanneractivitylayout;
+			global::ZXing.Mobile.Resource.Layout.zxingscannerfragmentlayout = global::victoria.Resource.Layout.zxingscannerfragmentlayout;
 		}
 		
 		public partial class Attribute
