@@ -98,11 +98,12 @@ namespace Scanner
                 b0 = System.Convert.FromBase64String(msgs[0]);
                 if (b0[0] != current_byte)
                 {
+                    this.vib.Vibrate(45);
                     current_byte = b0[0];
                     midiplayer.addToQueue(msgs);
-                    this.vib.Vibrate(55);
+                    this.vib.Vibrate(45);
                 }
-                this.vib.Vibrate(25);
+                //this.vib.Vibrate(25);
             }
         }
             
