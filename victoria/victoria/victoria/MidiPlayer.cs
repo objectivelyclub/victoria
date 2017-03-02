@@ -1,4 +1,5 @@
 ﻿using Plugin.Vibrate;
+using System;
 using Xamarin.Forms;
 
 namespace victoria
@@ -14,7 +15,6 @@ namespace victoria
 
         //Midi player Varaibles
         private iMidiDevice midi = DependencyService.Get<iMidiDevice>();
-        private iBlockingCollections midiEventQueue = DependencyService.Get<iBlockingCollections>();
         private iUtils utils = DependencyService.Get<iUtils>();
 
 
@@ -23,6 +23,7 @@ namespace victoria
         {
             dataAnalysisQueue = DependencyService.Get<iBlockingCollections>();
             midi.Start();
+            utils.newBlockingQueue("MidiEventQueue");
             utils.startNewThread("QRChecker", QRValidator);
             utils.startNewThread("MidiEventThread", midiEventThread);
         }
@@ -55,7 +56,7 @@ namespace victoria
         {
             while (true)
             {
-                midiEventQueue.actTake()();
+                utils.takeFromQueue("MidiEventQueue")();
             }
         }
 
@@ -64,8 +65,11 @@ namespace victoria
             for (int i = 1; i < s.GetLength(0) - 1; i++)
             {
                 byte[] b = System.Convert.FromBase64String(s[i]);
-                MidiEvent meve = new MidiEvent(b, midi, utils);
-                midiEventQueue.Add(meve.runEvent);
+                utils.addToQueue("MidiEventQueue", new Action(() => {
+                    utils.Sleep((0xFF & b[0]) | ((0xFF & b[1]) << 8) | ((0xFF & b[2]) << 16) | (0xFF & b[3] << 24));
+                    midi.Write(new byte[] { b[4], b[5], b[6] });
+                }));
+                
             }
         }
 
@@ -90,28 +94,5 @@ namespace victoria
         {
             midi.Write(new byte[] { (byte)m, (byte)n, (byte)v });
         }
-
-        public class MidiEvent
-        {
-            private int time;
-            private byte[] msg;
-            private iMidiDevice midi;
-            private iUtils utils;
-            public MidiEvent(byte[] b, iMidiDevice midi, iUtils utils)
-            {
-                this.utils = utils;
-                this.midi = midi;
-                this.time = (0xFF & b[0]) | ((0xFF & b[1]) << 8) | ((0xFF & b[2]) << 16) | (0xFF & b[3] << 24);
-                this.msg = new byte[] { b[4], b[5], b[6] };
-            }
-
-            public void runEvent()
-            {
-                utils.Sleep(this.time);
-                midi.Write(msg);
-            }
-        }
-
-
     }
 }

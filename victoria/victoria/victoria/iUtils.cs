@@ -8,6 +8,12 @@ namespace victoria
 {
     public interface iUtils
     {
+        void newBlockingQueue(String QueueName);
+
+        void addToQueue(String QueueName, Action a);
+
+        Action takeFromQueue(String QueueName);
+
         void startNewThread(String ThreadName, Action a);
 
         void quickProcessThread<T>(Action<T> a, T s);
