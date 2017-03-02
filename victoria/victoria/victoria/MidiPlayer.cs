@@ -9,7 +9,7 @@ namespace victoria
         //QR Data Analysis Variables
         private iBlockingCollections dataAnalysisQueue;
         string[] msgs;
-        byte current_byte = 213;
+        byte lastProcessedQrId = 213;
         byte[] b0;
         Plugin.Vibrate.Abstractions.IVibrate v = CrossVibrate.Current;
 
@@ -24,8 +24,8 @@ namespace victoria
             dataAnalysisQueue = DependencyService.Get<iBlockingCollections>();
             midi.Start();
             utils.newBlockingQueue("MidiEventQueue");
-            utils.startNewThread("QRChecker", QRValidator);
-            utils.startNewThread("MidiEventThread", midiEventThread);
+            utils.startNewLoopingThread("QRChecker", QRValidator);
+            utils.startNewLoopingThread("MidiEventThread", midiEventThread);
         }
 
         public void addToQRValidatorQueue(ZXing.Result r)
@@ -36,27 +36,28 @@ namespace victoria
             }
         }
 
-        private void QRValidator()
+        private void QRValidator2()
         {
-            while (true)
+            msgs = dataAnalysisQueue.strTake();
+            b0 = System.Convert.FromBase64String(msgs[0]);
+            if (b0[0] != lastProcessedQrId)
             {
-                msgs = dataAnalysisQueue.strTake();
-                b0 = System.Convert.FromBase64String(msgs[0]);
-                if (b0[0] != current_byte)
-                {
-                    current_byte = b0[0];
-                    addToQueue(msgs);
-                    v.Vibration(45);
-                }
+                lastProcessedQrId = b0[0];
+                utils.startNewSelfTerminatingThread(processRawBytes, msgs);
+                v.Vibration(45);
             }
         }
 
 
-        private void midiEventThread()
+        private void QRValidator()
         {
-            while (true)
+            msgs = dataAnalysisQueue.strTake();
+            b0 = System.Convert.FromBase64String(msgs[0]);
+            if (b0[0] != lastProcessedQrId)
             {
-                utils.takeFromQueue("MidiEventQueue")();
+                lastProcessedQrId = b0[0];
+                utils.startNewSelfTerminatingThread(processRawBytes, msgs);
+                v.Vibration(45);
             }
         }
 
@@ -73,9 +74,9 @@ namespace victoria
             }
         }
 
-        public void addToQueue(string[] s)
+        private void midiEventThread()
         {
-            utils.quickProcessThread(processRawBytes, s);
+            utils.takeFromQueue("MidiEventQueue")();
         }
 
         public void playCNote()

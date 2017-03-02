@@ -14,9 +14,9 @@ namespace victoria
 
         Action takeFromQueue(String QueueName);
 
-        void startNewThread(String ThreadName, Action a);
+        void startNewLoopingThread(String ThreadName, Action a);
 
-        void quickProcessThread<T>(Action<T> a, T s);
+        void startNewSelfTerminatingThread<T>(Action<T> a, T s);
 
         void Sleep(int miliseconds);
         

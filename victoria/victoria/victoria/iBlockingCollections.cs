@@ -9,10 +9,7 @@ namespace victoria
     public interface iBlockingCollections
     {
         void Add(string[] s);
-        void Add(Action a);
-
         string[] strTake();
-        Action actTake();
 
     }
 }

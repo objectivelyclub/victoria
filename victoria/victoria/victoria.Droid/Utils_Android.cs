@@ -29,14 +29,20 @@ namespace victoria.Droid
 
         }
 
-        public void quickProcessThread<T>(Action<T> a, T s)
+        public void startNewSelfTerminatingThread<T>(Action<T> a, T s)
         {
             new Thread(() => a(s)).Start();
         }
 
-        public void startNewThread(string ThreadName, Action a)
+        public void startNewLoopingThread(string ThreadName, Action a)
         {
-            ThreadMap[ThreadName] = new Thread(() => a());
+            ThreadMap[ThreadName] = new Thread(() =>
+            {
+                while (true)
+                {
+                    a();
+                }
+            });
             ThreadMap[ThreadName].Start();
         }
 
