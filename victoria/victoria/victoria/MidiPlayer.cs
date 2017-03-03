@@ -7,7 +7,6 @@ namespace victoria
     class MidiPlayer
     {
         //QR Data Analysis Variables
-        private iBlockingCollections dataAnalysisQueue;
         string[] msgs;
         byte lastProcessedQrId = 213;
         byte[] b0;
@@ -53,7 +52,6 @@ namespace victoria
                     utils.Sleep((0xFF & b[0]) | ((0xFF & b[1]) << 8) | ((0xFF & b[2]) << 16) | (0xFF & b[3] << 24));
                     midi.Write(new byte[] { b[4], b[5], b[6] });
                 }));
-
             }
         }
 
@@ -67,7 +65,6 @@ namespace victoria
             sendMidi((int)0x90 + 1, 52, 63);
             sendMidi((int)0x90 + 1, 55, 63);
         }
-
 
         protected void sendMidi(int m, int n, int v)
         {
