@@ -17,41 +17,24 @@ namespace victoria
         private iMidiDevice midi = DependencyService.Get<iMidiDevice>();
         private iUtils utils = DependencyService.Get<iUtils>();
 
-
-
         public MidiPlayer()
         {
-            dataAnalysisQueue = DependencyService.Get<iBlockingCollections>();
             midi.Start();
-            utils.newBlockingQueue("MidiEventQueue");
-            utils.startNewLoopingThread("QRChecker", QRValidator);
-            utils.startNewLoopingThread("MidiEventThread", midiEventThread);
+            utils.startNewThreadPool("MidiEventThread");
+            utils.startNewThreadPool("QRValidatorThread");
         }
 
         public void addToQRValidatorQueue(ZXing.Result r)
         {
-            if (r != null)
-            {
-                dataAnalysisQueue.Add(r.ToString().Split('\n'));
-            }
+            utils.addToThreadPool("QRValidatorThread", new Action(() => QRValidator(r)));
         }
 
-        private void QRValidator2()
+        private void QRValidator(ZXing.Result r)
         {
-            msgs = dataAnalysisQueue.strTake();
-            b0 = System.Convert.FromBase64String(msgs[0]);
-            if (b0[0] != lastProcessedQrId)
-            {
-                lastProcessedQrId = b0[0];
-                utils.startNewSelfTerminatingThread(processRawBytes, msgs);
-                v.Vibration(45);
-            }
-        }
+            if (r == null)
+                return;
 
-
-        private void QRValidator()
-        {
-            msgs = dataAnalysisQueue.strTake();
+            string[] msgs = r.ToString().Split('\n');
             b0 = System.Convert.FromBase64String(msgs[0]);
             if (b0[0] != lastProcessedQrId)
             {
@@ -66,17 +49,12 @@ namespace victoria
             for (int i = 1; i < s.GetLength(0) - 1; i++)
             {
                 byte[] b = System.Convert.FromBase64String(s[i]);
-                utils.addToQueue("MidiEventQueue", new Action(() => {
+                utils.addToThreadPool("MidiEventQueue", new Action(() => {
                     utils.Sleep((0xFF & b[0]) | ((0xFF & b[1]) << 8) | ((0xFF & b[2]) << 16) | (0xFF & b[3] << 24));
                     midi.Write(new byte[] { b[4], b[5], b[6] });
                 }));
-                
-            }
-        }
 
-        private void midiEventThread()
-        {
-            utils.takeFromQueue("MidiEventQueue")();
+            }
         }
 
         public void playCNote()

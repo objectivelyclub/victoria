@@ -16,6 +16,10 @@ namespace victoria
 
         void startNewLoopingThread(String ThreadName, Action a);
 
+        void startNewThreadPool(String ThreadName);
+
+        void addToThreadPool(String ThreadName, Action a);
+
         void startNewSelfTerminatingThread<T>(Action<T> a, T s);
 
         void Sleep(int miliseconds);

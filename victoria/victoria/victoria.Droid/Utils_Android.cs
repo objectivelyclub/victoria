@@ -22,6 +22,7 @@ namespace victoria.Droid
     public class Utils_Android : iUtils
     {
         Dictionary<string, Thread> ThreadMap = new Dictionary<string, Thread>();
+        Dictionary<string, Thread> ThreadPoolMap = new Dictionary<string, Thread>();
         Dictionary<string, BlockingCollection<Action>> QueueMap = new Dictionary<string, BlockingCollection<Action>>();
 
         public Utils_Android()
@@ -64,6 +65,25 @@ namespace victoria.Droid
         public Action takeFromQueue(string QueueName)
         {
             return QueueMap[QueueName].Take();
+        }
+
+        public void startNewThreadPool(string ThreadPoolName)
+        {
+            newBlockingQueue(ThreadPoolName);
+
+            ThreadMap[ThreadPoolName] = new Thread(() =>
+            {
+                while (true)
+                {
+                    QueueMap[ThreadPoolName].Take();
+                }
+            });
+            ThreadMap[ThreadPoolName].Start();
+        }
+
+        public void addToThreadPool(string ThreadPoolName, Action a)
+        {
+            addToQueue(ThreadPoolName, a);
         }
     }
 }
