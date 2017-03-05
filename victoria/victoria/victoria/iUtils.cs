@@ -8,6 +8,8 @@ namespace victoria
 {
     public interface iUtils
     {
+        byte[] fixStupidZXINGByteArray(byte[] b);
+
         void newBlockingQueue(String QueueName);
 
         void addToQueue(String QueueName, Action a);

@@ -1,5 +1,7 @@
-﻿using Plugin.Vibrate;
+﻿using Android.Util;
+using Plugin.Vibrate;
 using System;
+using System.IO;
 using Xamarin.Forms;
 
 namespace victoria
@@ -10,6 +12,7 @@ namespace victoria
         string[] msgs;
         byte lastProcessedQrId = 213;
         byte[] b0;
+        int QR_Num = 45;
         Plugin.Vibrate.Abstractions.IVibrate v = CrossVibrate.Current;
 
         //Midi player Varaibles
@@ -33,26 +36,35 @@ namespace victoria
             if (r == null)
                 return;
 
-            string[] msgs = r.ToString().Split('\n');
-            b0 = System.Convert.FromBase64String(msgs[0]);
-            if (b0[0] != lastProcessedQrId)
+            byte[] dat = System.Convert.FromBase64String(r.ToString());
+            int this_Num = (dat[0] << 8) | dat[1];
+
+            if (QR_Num != this_Num)
             {
-                lastProcessedQrId = b0[0];
-                utils.startNewSelfTerminatingThread(processRawBytes, msgs);
+                QR_Num = this_Num;
+                utils.startNewSelfTerminatingThread(processRawBytes, dat);
                 v.Vibration(45);
             }
         }
 
-        private void processRawBytes(string[] s)
+        private void processRawBytes(byte[] b)
         {
-            for (int i = 1; i < s.GetLength(0) - 1; i++)
+            //b.Length - 2
+            int j = 0;
+            int bps = 1000000 / 571429;
+
+            for (int i = 2; i < b.Length - 7; i+=7)
             {
-                byte[] b = System.Convert.FromBase64String(s[i]);
-                utils.addToThreadPool("MidiEventQueue", new Action(() => {
-                    utils.Sleep((0xFF & b[0]) | ((0xFF & b[1]) << 8) | ((0xFF & b[2]) << 16) | (0xFF & b[3] << 24));
-                    midi.Write(new byte[] { b[4], b[5], b[6] });
+                j++;
+                int ms = (0xFF & b[i]) | ((0xFF & b[i + 1]) << 8) | ((0xFF & b[i + 2]) << 16) | (0xFF & b[i+3] << 24);
+                Log.Debug("timing", "NOTE " + Convert.ToString(j) + " is " + Convert.ToString(ms));
+                utils.addToThreadPool("MidiEventThread", new Action(() => {
+                    utils.Sleep(ms);
+                    midi.Write(new byte[] { b[i + 4], b[i + 5], b[i + 6] });
                 }));
+
             }
+                
         }
 
         public void playCNote()

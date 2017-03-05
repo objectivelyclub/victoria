@@ -14,6 +14,7 @@ using Xamarin.Forms;
 using victoria.Droid;
 using System.Threading;
 using System.Collections.Concurrent;
+using ZXing.Common;
 
 [assembly: Dependency(typeof(Utils_Android))]
 
@@ -75,7 +76,7 @@ namespace victoria.Droid
             {
                 while (true)
                 {
-                    QueueMap[ThreadPoolName].Take();
+                    QueueMap[ThreadPoolName].Take()();
                 }
             });
             ThreadMap[ThreadPoolName].Start();
@@ -84,6 +85,12 @@ namespace victoria.Droid
         public void addToThreadPool(string ThreadPoolName, Action a)
         {
             addToQueue(ThreadPoolName, a);
+        }
+
+        public byte[] fixStupidZXINGByteArray(byte[] b)
+        {
+            return null;
+
         }
     }
 }
