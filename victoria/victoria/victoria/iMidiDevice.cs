@@ -12,5 +12,7 @@ namespace victoria
     {
         void Start();
         void Write(byte[] v);
+
+        void MIDIQueuer(int time, byte[] b);
     }
 }

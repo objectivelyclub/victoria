@@ -22,7 +22,7 @@ namespace victoria
 
         void addToThreadPool(String ThreadName, Action a);
 
-        void startNewSelfTerminatingThread<T>(Action<T> a, T s);
+        void startNewSelfTerminatingThread<T,G>(Action<T,G> a, T s, G g);
 
         void Sleep(int miliseconds);
         

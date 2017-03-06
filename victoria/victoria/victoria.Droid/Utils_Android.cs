@@ -31,9 +31,9 @@ namespace victoria.Droid
 
         }
 
-        public void startNewSelfTerminatingThread<T>(Action<T> a, T s)
+        public void startNewSelfTerminatingThread<T,G>(Action<T,G> a, T s, G g)
         {
-            new Thread(() => a(s)).Start();
+            new Thread(() => a(s,g)).Start();
         }
 
         public void startNewLoopingThread(string ThreadName, Action a)

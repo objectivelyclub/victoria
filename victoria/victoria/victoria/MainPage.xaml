@@ -10,6 +10,10 @@
        HorizontalOptions="Center"
        VerticalOptions="CenterAndExpand" />
 
+    <Button Text="Test Instruments"
+    HorizontalOptions="Center"
+    VerticalOptions="CenterAndExpand"
+    Clicked="TestMidi" />
 
     <Label Text="Let's Play Some Music!"
        Font="Large"

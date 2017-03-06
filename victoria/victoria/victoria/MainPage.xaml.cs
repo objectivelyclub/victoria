@@ -13,7 +13,7 @@ namespace victoria
     {
         ZXingScannerPage scanPage;
         MidiPlayer midiplayer;
-        int scanningfreq = 250;
+        int scanningfreq = 150;
 
         public MainPage()
         {
@@ -25,6 +25,11 @@ namespace victoria
         {
             scanningfreq = (int) (args.NewValue * 3000 + 100);
             refreshRateLabel.Text = scanningfreq.ToString("F3") + " ms";
+        }
+
+        void TestMidi(object sender, EventArgs args)
+        {
+            midiplayer.testMidiPlayer();
         }
 
         async void StartContinuousScanning(object sender, EventArgs args)
