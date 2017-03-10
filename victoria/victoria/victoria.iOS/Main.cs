@@ -14,6 +14,7 @@ namespace victoria.iOS
         {
             // if you want to use a different Application Delegate class from "AppDelegate"
             // you can specify it here.
+            global::ZXing.Net.Mobile.Forms.iOS.Platform.Init();
             UIApplication.Main(args, null, "AppDelegate");
         }
     }

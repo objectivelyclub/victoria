@@ -44,18 +44,22 @@ namespace victoria
             {
                 byte[] pc = new byte[] { (byte)((12 << 4) | i), reader.ReadByte() };
                 midi.Write(pc);
+                utils.Sleep(30);
             }
             
         }
 
         private void QRValidator(ZXing.Result r)
         {
+            //v.Vibration(45);
+            //return;
+
             if (r == null)
                 return;
 
             byte[] data = System.Convert.FromBase64String(r.ToString());
             int this_Num = (data[0] << 8) | data[1];
-            if (QR_Num == this_Num && current_song == data[3])
+            if (QR_Num == this_Num && current_song == data[2])
                 return;
 
             BinaryReader reader;
@@ -64,9 +68,9 @@ namespace victoria
             {
                 v.Vibration(45);
                 QR_Num = this_Num + 2;
-                current_song = data[2];
                 reader = new BinaryReader(new MemoryStream(data));
                 processChannels(reader);
+                current_song = data[2];
             }
 
             if (QR_Num != this_Num)
@@ -85,7 +89,15 @@ namespace victoria
             for (int i = 0; i < numOfMsgs ; i++)
             {
                 int ms = (0xFF & b.ReadByte()) | ((0xFF & b.ReadByte()) << 8) | ((0xFF & b.ReadByte()) << 16) | (0xFF & b.ReadByte() << 24);
-                byte[] msg = b.ReadBytes(3);
+                byte[] msg;
+                if (((b.PeekChar() | 0x10) &  0xF0) ==  0xD0)
+                {
+                    msg = b.ReadBytes(2);
+                }
+                else
+                {
+                    msg = b.ReadBytes(3);
+                }
                 /*utils.addToThreadPool("MidiEventThread", new Action(() => {
                     utils.Sleep(ms);
                     midi.Write(msg);
@@ -110,26 +122,26 @@ namespace victoria
         public void testMidiPlayer()
         {
             //Set channels
-            //midi.Write(new byte[] { (byte)((12 << 4) | 0), });
-            midi.Write(new byte[] { 0xC1, 35});
-            midi.Write(new byte[] { 0xC2, 49 });
+            midi.Write(new byte[] { 0xC0, 75 });
+            /*midi.Write(new byte[] { 0xC1, 75 });
+            midi.Write(new byte[] { 0xC2, 75 });
             midi.Write(new byte[] { 0xC3, 75 });
-            midi.Write(new byte[] { 0xC4, 52 });
-            midi.Write(new byte[] { 0xC5, 48 });
-            midi.Write(new byte[] { 0xC6, 19 });
-            midi.Write(new byte[] { 0xC7, 81});
-            midi.Write(new byte[] { 0xC8, 30});
-            //midi.Write(new byte[] { 0xC9, 0 });
-            midi.Write(new byte[] { 0xCA, 42 });
-            midi.Write(new byte[] { 0xCB, 26 });
-            midi.Write(new byte[] { 0xCC, 60 });
-            midi.Write(new byte[] { 0xCD, 11 });
-            //midi.Write(new byte[] { (byte)((12 << 4) | 0), });
-            //midi.Write(new byte[] { (byte)((12 << 4) | 0), });
+            midi.Write(new byte[] { 0xC4, 75 });
+            midi.Write(new byte[] { 0xC5, 75 });
+            midi.Write(new byte[] { 0xC6, 75 });
+            midi.Write(new byte[] { 0xC7, 75 });
+            midi.Write(new byte[] { 0xC8, 75 });
+            midi.Write(new byte[] { 0xC9, 75 });
+            midi.Write(new byte[] { 0xCA, 75 });
+            midi.Write(new byte[] { 0xCB, 75 });
+            midi.Write(new byte[] { 0xCC, 75 });
+            midi.Write(new byte[] { 0xCD, 75 });
+            midi.Write(new byte[] { 0xCE, 75 });
+            midi.Write(new byte[] { 0xCF, 75 });*/
 
             utils.Sleep(100);
-            sendMidi(0x90, 48, 63);
-            sendMidi(0x91, 52, 63);
+            sendMidi(0x90, 70, 63);
+           /* sendMidi(0x91, 52, 63);
             sendMidi(0x92, 55, 63);
             sendMidi(0x93, 48, 63);
             sendMidi(0x94, 52, 63);
@@ -146,8 +158,9 @@ namespace victoria
             sendMidi(0x9F, 48, 63);
             sendMidi(0x90, 52, 63);
             sendMidi(0x90, 55, 63);
-
+            */
             //utils.Sleep(1000);
+            /*
             sendMidi(0x90, 48, 63);
             sendMidi(0x91, 52, 63);
             sendMidi(0x92, 55, 63);
@@ -166,6 +179,7 @@ namespace victoria
             sendMidi(0x9F, 48, 63);
             sendMidi(0x90, 52, 63);
             sendMidi(0x90, 55, 63);
+            */
 
 
         }
