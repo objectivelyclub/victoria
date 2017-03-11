@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace victoria
 {
     public interface iUtils
     {
-        byte[] fixStupidZXINGByteArray(byte[] b);
-
         void newBlockingQueue(String QueueName);
 
         void addToQueue(String QueueName, Action a);
@@ -22,9 +15,15 @@ namespace victoria
 
         void addToThreadPool(String ThreadName, Action a);
 
+        void emptyThreadPool(String ThreadName);
+
         void startNewSelfTerminatingThread<T,G>(Action<T,G> a, T s, G g);
 
         void Sleep(int miliseconds);
+
+        void newTimer(String TimerName,  Action a, int interval);
+
+        void resetTimer(String TimerName);
         
     }
 }

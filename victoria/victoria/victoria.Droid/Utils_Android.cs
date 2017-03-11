@@ -1,20 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 
 using Xamarin.Forms;
 using victoria.Droid;
 using System.Threading;
 using System.Collections.Concurrent;
-using ZXing.Common;
+using System.Timers;
 
 [assembly: Dependency(typeof(Utils_Android))]
 
@@ -22,6 +13,7 @@ namespace victoria.Droid
 {
     public class Utils_Android : iUtils
     {
+        Dictionary<string, System.Timers.Timer> TimerMap = new Dictionary<string, System.Timers.Timer>();
         Dictionary<string, Thread> ThreadMap = new Dictionary<string, Thread>();
         Dictionary<string, Thread> ThreadPoolMap = new Dictionary<string, Thread>();
         Dictionary<string, BlockingCollection<Action>> QueueMap = new Dictionary<string, BlockingCollection<Action>>();
@@ -91,6 +83,29 @@ namespace victoria.Droid
         {
             return null;
 
+        }
+
+        public void emptyThreadPool(string ThreadPoolName)
+        {
+            while (QueueMap[ThreadPoolName].Count>0)
+            {
+                QueueMap[ThreadPoolName].Take();
+            }
+        }
+
+        public void newTimer(string TimerName, Action a, int interval)
+        {
+            System.Timers.Timer timer = new System.Timers.Timer(interval);
+            timer.Enabled = false;
+            timer.AutoReset = false;
+            timer.Elapsed += (s, e) => a();
+            TimerMap.Add(TimerName, timer);
+        }
+
+        public void resetTimer(string TimerName)
+        {
+            TimerMap[TimerName].Stop();
+            TimerMap[TimerName].Start();
         }
     }
 }

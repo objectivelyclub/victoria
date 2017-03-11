@@ -74,9 +74,9 @@
     <ConsolePause>False</ConsolePause>
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <BuildIpa>True</BuildIpa>
-    <CodesignProvision>Automatic:AdHoc</CodesignProvision>
-    <CodesignKey>iPhone Distribution</CodesignKey>
+    <CodesignKey>iPhone Developer: cinx35@gmail.com (69G9UG3TY9)</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <CodesignProvision>c3e4e295-05c8-4334-9c20-8271373cdea6</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AppStore|iPhone' ">
     <DebugType>none</DebugType>

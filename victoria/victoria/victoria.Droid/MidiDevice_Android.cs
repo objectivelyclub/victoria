@@ -1,20 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-
 using Xamarin.Forms;
 using victoria.Droid;
 using Org.Billthefarmer.Mididriver;
 using System.Collections.Concurrent;
 using System.Threading;
+using System.Timers;
 
 [assembly: Dependency(typeof(MidiDevice_Android))]
 
@@ -23,8 +12,9 @@ namespace victoria.Droid
     public class MidiDevice_Android : iMidiDevice
     {
         private MidiDriver midi;
-        BlockingCollection<int> timearray = new BlockingCollection<int>();
-        BlockingCollection<byte[]> notes = new BlockingCollection<byte[]>();
+        private BlockingCollection<int> timearray = new BlockingCollection<int>();
+        private BlockingCollection<byte[]> notes = new BlockingCollection<byte[]>();
+
         public MidiDevice_Android()
         {
             midi = new MidiDriver();
@@ -39,6 +29,8 @@ namespace victoria.Droid
             t.Start();
         }
 
+        
+
         public void MIDIQueuer(int time, byte[] b)
         {
             timearray.Add(time);
@@ -48,6 +40,19 @@ namespace victoria.Droid
         public void Start()
         {
             midi.Start();
+        }
+
+        public void Stop()
+        {
+            midi.Stop();
+            while (notes.Count > 0)
+            {
+                notes.Take();
+            }
+            while (timearray.Count > 0)
+            {
+                timearray.Take();
+            }
         }
 
         public void Write(byte[] v)
