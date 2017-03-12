@@ -73,26 +73,7 @@ namespace victoria
 
         public void testMidiPlayer()
         {
-            //Set channels
-            //midi.Write(new byte[] { 0xC0, 75 });
-            /*midi.Write(new byte[] { 0xC1, 75 });
-            midi.Write(new byte[] { 0xC2, 75 });
-            midi.Write(new byte[] { 0xC3, 75 });
-            midi.Write(new byte[] { 0xC4, 75 });
-            midi.Write(new byte[] { 0xC5, 75 });
-            midi.Write(new byte[] { 0xC6, 75 });
-            midi.Write(new byte[] { 0xC7, 75 });
-            midi.Write(new byte[] { 0xC8, 75 });
-            midi.Write(new byte[] { 0xC9, 75 });
-            midi.Write(new byte[] { 0xCA, 75 });
-            midi.Write(new byte[] { 0xCB, 75 });
-            midi.Write(new byte[] { 0xCC, 75 });
-            midi.Write(new byte[] { 0xCD, 75 });
-            midi.Write(new byte[] { 0xCE, 75 });
-            midi.Write(new byte[] { 0xCF, 75 });*/
-            //byte[] inst = new byte[] { };
-
-            
+                       
             byte pc = 0xC0;
             for (byte i = 0; i<15; i++)
             {
@@ -106,49 +87,6 @@ namespace victoria
                 //utils.Sleep(100);
                 sendMidi(0x80, 52, 63);
             }
-            utils.Sleep(100);
-            //sendMidi(0x90, 70, 63);
-           /* sendMidi(0x91, 52, 63);
-            sendMidi(0x92, 55, 63);
-            sendMidi(0x93, 48, 63);
-            sendMidi(0x94, 52, 63);
-            sendMidi(0x95, 55, 63);
-            sendMidi(0x96, 48, 63);
-            sendMidi(0x97, 52, 63);
-            sendMidi(0x98, 55, 63);
-            sendMidi(0x99, 48, 63);
-            sendMidi(0x9A, 52, 63);
-            sendMidi(0x9B, 55, 63);
-            sendMidi(0x9C, 48, 63);
-            sendMidi(0x9D, 52, 63);
-            sendMidi(0x9E, 55, 63);
-            sendMidi(0x9F, 48, 63);
-            sendMidi(0x90, 52, 63);
-            sendMidi(0x90, 55, 63);
-            */
-            //utils.Sleep(1000);
-            /*
-            sendMidi(0x90, 48, 63);
-            sendMidi(0x91, 52, 63);
-            sendMidi(0x92, 55, 63);
-            sendMidi(0x93, 48, 63);
-            sendMidi(0x94, 52, 63);
-            sendMidi(0x95, 55, 63);
-            sendMidi(0x96, 48, 63);
-            sendMidi(0x97, 52, 63);
-            sendMidi(0x98, 55, 63);
-            sendMidi(0x99, 48, 63);
-            sendMidi(0x9A, 52, 63);
-            sendMidi(0x9B, 55, 63);
-            sendMidi(0x9C, 48, 63);
-            sendMidi(0x9D, 52, 63);
-            sendMidi(0x9E, 55, 63);
-            sendMidi(0x9F, 48, 63);
-            sendMidi(0x90, 52, 63);
-            sendMidi(0x90, 55, 63);
-            */
-
-
         }
 
         protected void sendMidi(int m, int n, int v)
