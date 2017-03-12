@@ -15,7 +15,7 @@ namespace victoria
         
         public void processChannels(byte[] data)
         {
-            for (int i = 3; i<19; i++)
+            for (int i = 6; i<22; i++)
             {
                 byte[] pc = new byte[] { (byte)((12 << 4) | i), data[i] };
                 midi.Write(pc);
