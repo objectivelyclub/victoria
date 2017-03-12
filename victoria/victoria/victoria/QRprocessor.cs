@@ -1,9 +1,6 @@
-﻿using Android.Util;
-using Plugin.Vibrate;
+﻿using Plugin.Vibrate;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Xamarin.Forms;
 
 namespace victoria
@@ -17,7 +14,6 @@ namespace victoria
         private Page page;
         private MidiPlayer midiplayer;
         private iUtils utils = DependencyService.Get<iUtils>();
-        private bool alertActive = false;
         private Plugin.Vibrate.Abstractions.IVibrate v = CrossVibrate.Current;
 
         public QRprocessor(MidiPlayer midiplayer, Page page)
@@ -33,48 +29,17 @@ namespace victoria
             utils.addToThreadPool("QRValidatorThread", new Action(() => QRValidator(r)));
         }
         
-        private void openDisplayAlert(String str)
-        {
-            if (!alertActive)
-            {
-                alertActive = true;
-                Device.BeginInvokeOnMainThread(() => displayAlert(str));
-            }
-        }
-
-        private async void displayAlert(String str)
-        {
-            if (Uri.IsWellFormedUriString(str, UriKind.Absolute))
-            {
-                if (await page.DisplayAlert("Navigate to Link?", str, "Yes", "No"))
-                {
-                    Device.OpenUri(new Uri(str));
-                }
-            }
-            else
-            {
-                await page.DisplayAlert("Invalid QR Data", str, "Close");
-            }
-            alertActive = false;
-        }
-
+        
         private void QRValidator(ZXing.Result r)
         {
-            if (r == null)
-                return;
-
             try {
-                data = System.Convert.FromBase64String(r.ToString());
+                data = Convert.FromBase64String(r.ToString());
             } catch (Exception e) {
-                openDisplayAlert(r.Text);
                 return;
             }
 
-            if (data[0] != 0x41 || data[1] != 0x13 || data[2] != 0x08 || data.Length < 20)
-            {
-                openDisplayAlert(r.Text);
+            if (data.Length < 20)
                 return;
-            }
 
             int currentQR = (data[3] << 8) | data[4];
             if (lastQR == currentQR && songID == data[5])

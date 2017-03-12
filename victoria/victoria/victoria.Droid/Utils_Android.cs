@@ -5,7 +5,6 @@ using Xamarin.Forms;
 using victoria.Droid;
 using System.Threading;
 using System.Collections.Concurrent;
-using System.Timers;
 
 [assembly: Dependency(typeof(Utils_Android))]
 

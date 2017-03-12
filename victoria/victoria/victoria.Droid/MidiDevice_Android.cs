@@ -3,7 +3,6 @@ using victoria.Droid;
 using Org.Billthefarmer.Mididriver;
 using System.Collections.Concurrent;
 using System.Threading;
-using System.Timers;
 
 [assembly: Dependency(typeof(MidiDevice_Android))]
 
