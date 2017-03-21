@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using Xamarin.Forms;
+using ZXing.Net.Mobile.Forms;
 
 namespace victoria
 {
@@ -11,17 +12,19 @@ namespace victoria
         private int lastQR = 45;
         private int songID = 200;
 
-        private Page page;
+        private ZXingScannerPage page;
         private MidiPlayer midiplayer;
         private iUtils utils = DependencyService.Get<iUtils>();
         private Plugin.Vibrate.Abstractions.IVibrate v = CrossVibrate.Current;
+        private MainOverlay overlay;
 
-        public QRprocessor(MidiPlayer midiplayer, Page page)
+        public QRprocessor(MidiPlayer midiplayer, ZXingScannerPage page)
         {
             this.page = page;
+            overlay = (MainOverlay)page.Overlay;
             this.midiplayer = midiplayer;
             utils.startNewThreadPool("QRValidatorThread");
-            utils.newTimer("ClearNotes", QRTimeout, 2500);
+            utils.newTimer("ClearNotes", QRTimeout, 3500);
         }
 
         public void addToQRValidatorQueue(ZXing.Result r)
@@ -38,7 +41,8 @@ namespace victoria
                 return;
             }
 
-            if (data.Length < 20)
+
+            if (data.Length < 25)
                 return;
 
             int currentQR = (data[3] << 8) | data[4];
@@ -46,13 +50,15 @@ namespace victoria
                 return;
             
             if (songID != data[5]) {
+                v.Vibration(45);
                 songID = data[5];
                 newSong(data);
                 lastQR = currentQR++;
             }
             if (lastQR != currentQR) {
-                utils.resetTimer("ClearNotes");
                 lastQR = currentQR;
+                utils.resetTimer("ClearNotes");
+                Device.BeginInvokeOnMainThread(() => overlay.newScan());
                 newQRCode(data);
             }
             data = new byte[] { };
@@ -60,7 +66,6 @@ namespace victoria
 
         private void newSong(byte[] data)
         {
-            v.Vibration(45);
             midiplayer.resetPlayer();
             midiplayer.processChannels(data);
         }

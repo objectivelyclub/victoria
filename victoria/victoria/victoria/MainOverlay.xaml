@@ -15,7 +15,7 @@
     <BoxView Grid.Row="1" BackgroundColor = "Color.Blue" VerticalOptions = "LayoutOptions.Center" HeightRequest = "2" Opacity = "0.8" />
     <BoxView Grid.Row="2" BackgroundColor = "Color.Black" Opacity = "0.5"  />
     <Label Grid.Row="2" Text = "Tap to Focus" VerticalOptions = "LayoutOptions.Center" HorizontalOptions = "LayoutOptions.Center" TextColor = "Color.White"/>
-
+    
 
   </Grid>
 </ContentView>

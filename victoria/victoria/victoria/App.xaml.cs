@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Xamarin.Forms;
+using ZXing;
 using ZXing.Mobile;
 using ZXing.Net.Mobile.Forms;
 
@@ -7,11 +9,11 @@ namespace victoria
 {
     public partial class App : Application
     {
-        private int scanningfreq = 225;
+        private int scanningfreq = 30;
         private bool alertActive = false;
         private MidiPlayer midiplayer;
         private QRprocessor qrprocessor;
-        private ContentView overlay;
+        private MainOverlay overlay;
         private ZXingScannerPage scanPage;
 
         public App()
@@ -22,6 +24,10 @@ namespace victoria
             
             var opt = new MobileBarcodeScanningOptions();
             opt.DelayBetweenContinuousScans = scanningfreq;
+            opt.TryHarder = true;
+            opt.PossibleFormats.Add(BarcodeFormat.QR_CODE);
+            opt.DelayBetweenAnalyzingFrames = scanningfreq;
+            opt.CharacterSet = "US-ASCII";
             scanPage = new ZXingScannerPage(opt, overlay);
 
             qrprocessor = new QRprocessor(midiplayer, scanPage);
@@ -66,7 +72,7 @@ namespace victoria
             }
             else
             {
-                await scanPage.DisplayAlert("Invalid QR Data", str, "Close");
+                //await scanPage.DisplayAlert("Invalid QR Data", str, "Close");
             }
             alertActive = false;
         }
